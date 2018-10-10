@@ -1,10 +1,8 @@
 import { UploadService } from './upload.service';
 import {Component, OnInit} from '@angular/core';
 import {FileUploader} from 'ng2-file-upload';
-import * as XLSX from 'xlsx';
 import { FileObjectModel, UploadFileMode } from './file-object-model';
-// const URL = '/api/';
-// const URL = 'https://evening-anchorage-3159.herokuapp.com/api/';
+import {MatTableDataSource} from '@angular/material';
 
 const URL =  'http://localhost:3000/api';
 
@@ -14,6 +12,8 @@ export class ContentAreaComponent implements OnInit {
   public hasBaseDropZoneOver = false;
   public filesListModel: Array<UploadFileMode> = [];
   public reportType: string[] = ['report1', 'report2', 'report3', 'report4'];
+  public displayedColumns: string[] = ['Name', 'ReportType', 'Size', 'Status', 'Actions'];
+  public filesListModelDataSource = new MatTableDataSource([]);
   constructor(private _uploadService: UploadService) {}
 
   ngOnInit() {}
@@ -74,8 +74,8 @@ export class ContentAreaComponent implements OnInit {
       // if (!rABS) { bstr = new Uint8Array(bstr); }
       bstr = bstr.substring(bstr.indexOf('base64,') + 7);
       // tslint:disable-next-line:max-line-length
-      const rowModel: UploadFileMode = { Name: oEvent[0].name , Size: oEvent[0].size, File: bstr, Status: 'success', ReportType: 'report1' };
-      this.filesListModel.push(rowModel);
+      const rowModel: UploadFileMode = { Name: oEvent[0].name , Size: oEvent[0].size, File: bstr, Status: 'success', ReportType: '' };
+      this.filesListModelDataSource.data = [...this.filesListModelDataSource.data, rowModel];
     };
     // need to comment RABS
     // if (rABS) { reader.readAsBinaryString(target[0]); } else { reader.readAsArrayBuffer(target[0]); }
