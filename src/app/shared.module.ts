@@ -7,7 +7,10 @@ import {
     MatInputModule,
     MatPaginatorModule,
     MatSelectModule,
-    MatOptionModule
+    MatOptionModule,
+    MatTreeModule,
+    MatIconModule,
+    MatDialogModule
 } from '@angular/material';
 import {NgModule} from '@angular/core';
 
@@ -21,7 +24,10 @@ import {NgModule} from '@angular/core';
         MatInputModule,
         MatPaginatorModule,
         MatSelectModule,
-        MatOptionModule
+        MatOptionModule,
+        MatTreeModule,
+        MatIconModule,
+        MatDialogModule
     ],
     exports: [
         MatButtonModule,
@@ -32,7 +38,10 @@ import {NgModule} from '@angular/core';
         MatInputModule,
         MatPaginatorModule,
         MatSelectModule,
-        MatOptionModule
+        MatOptionModule,
+        MatTreeModule,
+        MatIconModule,
+        MatDialogModule
     ]
 })
 export class SharedModule {}

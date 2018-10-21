@@ -1,0 +1,50 @@
+<div>
+  <div class="row text-center">
+    <h4>
+      Model Processed
+    </h4>
+  </div>
+  <div class="row">
+    <div class="col-lg-12 col-md-12" style="margin-bottom: 100px;">
+      <div class="mat-elevation-z8" style="width:100%;">
+        <mat-table #table [dataSource]="modelProcessedDataSource" class="mat-elevation-z8">
+          <ng-container matColumnDef="Attribute">
+            <mat-header-cell *matHeaderCellDef>Attribute</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element?.Attribute}} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="ModelYear">
+            <mat-header-cell *matHeaderCellDef>Model Year</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element?.ModelYear}}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="ModelId">
+            <mat-header-cell *matHeaderCellDef>Model Id</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element?.ModelId}}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="Description">
+            <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element?.Description}}</mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="Compare">
+            <mat-header-cell *matHeaderCellDef>Compare</mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              check box here
+            </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="Note">
+            <mat-header-cell *matHeaderCellDef>Note</mat-header-cell>
+            <mat-cell *matCellDef="let element">
+              anchor tag here
+            </mat-cell>
+          </ng-container>
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+        </mat-table>
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+      </div>
+    </div>
+
+  </div>
+  <div class="row text-center">
+    <button type="button" class="btn btn-primary" (click)="compareResults()">Compare Results</button>
+  </div>
+</div>
