@@ -25,6 +25,7 @@ export class ModelFormula {
 }
 
 export interface IModelFormulaTableData {
+    categoryID: number;
     fundingModel: string;
     maxValue: string;
     modelingValue: string;

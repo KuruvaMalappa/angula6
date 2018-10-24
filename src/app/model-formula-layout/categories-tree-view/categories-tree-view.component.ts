@@ -26,7 +26,9 @@ export class CategoriesTreeViewComponent implements OnInit {
 
   ngOnInit() {
     this._categoriesService.getCategoriesList().subscribe((categoriesList: Categories) => {
-    this.categoriesListDataSource.data = categoriesList.categories;
+    this.categoriesListDataSource.data = [categoriesList];
+    const listcopy = Object.assign({}, categoriesList);
+    this._categoriesService.categorieData.next([listcopy]);
    });
   }
 

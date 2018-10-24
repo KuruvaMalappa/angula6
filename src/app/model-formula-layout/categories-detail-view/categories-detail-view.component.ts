@@ -10,10 +10,11 @@ import { IModelFormulaTableData } from '../categories-tree-view/categories-model
 })
 export class CategoriesDetailViewComponent implements OnInit {
   public categoryData: Categories;
+  
   modelFormula = new ModelFormula('', '', '');
   constructor(private _categoriesService: CategoriesTreeService) {
     this._categoriesService.categorieDataChange.subscribe((currentCategoryData: Categories) => {
-      console.log( "node data detail view", currentCategoryData);
+      console.log( 'node data detail view', currentCategoryData);
       this.categoryData = currentCategoryData;
       this.modelFormula.fundingModel = currentCategoryData.fundingModel;
       this.modelFormula.maxValue = currentCategoryData.maxValue;
@@ -25,8 +26,9 @@ export class CategoriesDetailViewComponent implements OnInit {
   }
 
   modelFormulaSubmit() {
-    console.log("this.modelFormula", this.modelFormula);
+    console.log('this.modelFormula', this.modelFormula);
     const modelFormulaTableData: IModelFormulaTableData = {
+      categoryID: this.categoryData.categoryID,
       categoryName: this.categoryData.categoryName,
       parentNodeName: this.categoryData.parentNodeName,
       fundingModel: this.modelFormula.fundingModel,

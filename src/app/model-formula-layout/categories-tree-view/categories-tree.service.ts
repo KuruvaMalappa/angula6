@@ -19,6 +19,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class CategoriesTreeService {
   categorieDataChange: any = new BehaviorSubject<Categories[]>([]);
+  categorieData: any = new BehaviorSubject<Categories[]>([]);
   modelFormulaTableDataChange: any = new BehaviorSubject<IModelFormulaTableData[]>([]);
 
   constructor(private _http: HttpClient) { }
