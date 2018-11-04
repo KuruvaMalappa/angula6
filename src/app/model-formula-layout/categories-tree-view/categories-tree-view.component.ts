@@ -33,13 +33,29 @@ export class CategoriesTreeViewComponent implements OnInit {
   }
 
   getCurrentNodeData(node: any) {
+    this.parentNode =  undefined;
+    const parentTreeNode = this.recurrsiveCategoryList(this.categoriesListDataSource.data, node);
+    console.log('parentTreeNode', parentTreeNode);
     this.currentCategoryId = node.categoryID;
-    node.parentNodeName = this.parentNode.categoryName;
+    node.parentNodeName = parentTreeNode.categoryName;
     const childrenNode = this.nestedTreeControl.getChildren(node);
     this._categoriesService.categorieDataChange.next(node);
   }
-  getParentNode(node: Categories) {
-    this.currentCategoryId = node.categoryID;
-    this.parentNode = node;
+
+  recurrsiveCategoryList(categoryList, currentNodeElement): Categories {
+    if (categoryList && categoryList.length === 0) {
+      return this.parentNode;
+    } else if (categoryList && categoryList.length > 0) {
+      categoryList.forEach((categoryObj: Categories) => {
+        if (currentNodeElement && currentNodeElement.parentCategoryID) {
+              if (currentNodeElement.parentCategoryID === categoryObj.categoryID) {
+                return this.parentNode = categoryObj;
+              }
+        }
+        this.recurrsiveCategoryList(categoryObj.categories, currentNodeElement);
+      });
+      return this.parentNode;
+    }
   }
+
 }
