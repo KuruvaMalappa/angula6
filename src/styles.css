@@ -1,2 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+.successiconcolor{
+    color: #4fb738;
+    cursor: pointer;
+}
+.inprogressiconcolor{
+    color: #4a5051;
+    cursor: pointer;
+}
+
+.erroriconcolor{
+    color: #ea090d;
+    cursor: pointer;
+}

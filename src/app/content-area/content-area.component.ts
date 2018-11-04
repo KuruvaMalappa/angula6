@@ -48,7 +48,7 @@ export class ContentAreaComponent implements OnInit {
       // if (!rABS) { bstr = new Uint8Array(bstr); }
       bstr = bstr.substring(bstr.indexOf('base64,') + 7);
       // tslint:disable-next-line:max-line-length
-      const rowModel: UploadFileMode = { Name: oEvent[0].name , Size: oEvent[0].size, File: bstr, Status: 'success', ReportType: '' };
+      const rowModel: UploadFileMode = { Name: oEvent[0].name , Size: oEvent[0].size, File: bstr, Status: 'Inprogress', ReportType: '' };
       this.filesListModelDataSource.data = [...this.filesListModelDataSource.data, rowModel];
     };
     // need to comment RABS
@@ -65,11 +65,17 @@ private isValidFiles(files) {
   return true;
 }
 
-  uploadfile(rowObject: UploadFileMode) {
+  uploadfile(rowObject: UploadFileMode, rowIndex: number) {
      console.log('rowObject', rowObject);
      const inputObject = {File: rowObject.File, ReportType: rowObject.ReportType};
      this._uploadService.submitFile(inputObject).subscribe((response) => {
-        console.log('response', response);
+      this.filesListModelDataSource.data.forEach((fileObj, elementIndex) => {
+        if (rowObject && (rowIndex === elementIndex)  && (rowObject.Name === fileObj.Name)) {
+          fileObj.Status = response ? 'Success' : 'Failed';
+          return fileObj;
+        }
+      });
+        console.log('response', this.filesListModelDataSource.data);
      });
 
   }
@@ -79,5 +85,26 @@ private isValidFiles(files) {
   }
   selectReportType(value: string) {
     // this.reportType = value;
+  }
+
+  getStatusIcons(status: string): string {
+    let iconStatus = '';
+    switch (status) {
+        case 'Inprogress':
+            iconStatus = 'autorenew';
+            break;
+        case 'Success':
+            iconStatus = 'check_circle';
+            break;
+        case 'Failed':
+            iconStatus = 'highlight_off';
+            break;
+        default:
+            iconStatus = 'autorenew';
+            break;
+    }
+
+    return iconStatus;
+
   }
 }
