@@ -1,5 +1,5 @@
 <div>
-  <div *ngIf="categoryData && categoryData.fundingModel">
+  <div *ngIf="modelFormula.fundingModel && modelFormula.fundingModel.length >0">
     <h1> {{categoryData.parentNodeName }} : {{categoryData.categoryName}}</h1>
     <form #modelFormulaForm="ngForm" (ngSubmit)="modelFormulaSubmit()">
       <div class="row">

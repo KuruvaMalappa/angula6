@@ -1,19 +1,22 @@
 import { UploadService } from './upload.service';
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, OnDestroy} from '@angular/core';
 import {FileUploader} from 'ng2-file-upload';
 import { FileObjectModel, UploadFileMode } from './file-object-model';
 import {MatTableDataSource} from '@angular/material';
+import { Subscription } from 'rxjs/internal/Subscription';
 
 const URL =  'http://localhost:3000/api';
 
 @Component({selector: 'app-content-area', templateUrl: './content-area.component.html', styleUrls: ['./content-area.component.css']})
-export class ContentAreaComponent implements OnInit {
+export class ContentAreaComponent implements OnInit, OnDestroy {
+  
   public uploader: FileUploader = new FileUploader({url: URL, isHTML5: true});
   public hasBaseDropZoneOver = false;
   public filesListModel: Array<UploadFileMode> = [];
   public reportType: string[] = ['report1', 'report2', 'report3', 'report4'];
   public displayedColumns: string[] = ['Name', 'ReportType', 'Size', 'Status', 'Actions'];
   public filesListModelDataSource = new MatTableDataSource([]);
+  public fileSubscription: Subscription;
   constructor(private _uploadService: UploadService) {}
 
   ngOnInit() {}
@@ -68,7 +71,7 @@ private isValidFiles(files) {
   uploadfile(rowObject: UploadFileMode, rowIndex: number) {
      console.log('rowObject', rowObject);
      const inputObject = {File: rowObject.File, ReportType: rowObject.ReportType};
-     this._uploadService.submitFile(inputObject).subscribe((response) => {
+     this.fileSubscription = this._uploadService.submitFile(inputObject).subscribe((response) => {
       this.filesListModelDataSource.data.forEach((fileObj, elementIndex) => {
         if (rowObject && (rowIndex === elementIndex)  && (rowObject.Name === fileObj.Name)) {
           fileObj.Status = response ? 'Success' : 'Failed';
@@ -106,5 +109,11 @@ private isValidFiles(files) {
 
     return iconStatus;
 
+  }
+
+  ngOnDestroy(): void {
+    if (this.fileSubscription) {
+      this.fileSubscription.unsubscribe();
+    }
   }
 }

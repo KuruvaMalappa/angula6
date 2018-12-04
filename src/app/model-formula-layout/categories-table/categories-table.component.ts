@@ -1,20 +1,30 @@
 import { BepDailogComponent } from './../../common/bep-dailog/bep-dailog.component';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { CategoriesTreeService } from '../categories-tree-view/categories-tree.service';
 import { Categories, IModelFormulaTableData } from '../categories-tree-view/categories-model';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs/internal/Subscription';
 
 @Component({selector: 'app-categories-table',
 templateUrl: './categories-table.component.html',
 styleUrls: ['./categories-table.component.css']})
-export class CategoriesTableComponent implements OnInit {
+export class CategoriesTableComponent implements OnInit, OnDestroy {
+  
   public categoriesListData: Categories[];
   public displayedColumns: string[] = ['parentNodeName', 'categoryName', 'fundingModel', 'modelingValue'];
   public modelFormulaTableDataSource = new MatTableDataSource([]);
+  public runModelSubscription: Subscription;
+  public modelFormulaTableSubscription: Subscription;
+  public catListDataSubscription: Subscription;
+  
 
   constructor(private _categoriesService: CategoriesTreeService, public dialog: MatDialog, private _router: Router) {
+    
+  }
+
+  ngOnInit() {
     this._categoriesService.modelFormulaTableDataChange.subscribe((responseData) => {
       if (responseData && !(responseData.length === 0)) {
         this.modelFormulaTableDataSource.data = [...this.modelFormulaTableDataSource.data , responseData];
@@ -24,9 +34,8 @@ export class CategoriesTableComponent implements OnInit {
       console.log( 'categoriesData', categoriesData);
      this.categoriesListData = categoriesData;
     });
+    this.modelFormulaTableDataSource.data = [];
   }
-
-  ngOnInit() {}
   onSubmitRunModel(runModelForm) {
     console.log('runModelForm', runModelForm);
     const localCategoryList =  this.categoriesListData;
@@ -41,7 +50,7 @@ export class CategoriesTableComponent implements OnInit {
       'FormulaCategories': [Object.assign({}, this.categoriesListData[0])]
      };
     console.log('After updated value', data);
-    this._categoriesService.categoriesRunModel(data).subscribe((runModelResponse) => {
+    this.runModelSubscription = this._categoriesService.categoriesRunModel(data).subscribe((runModelResponse) => {
       console.log('runModelResponse', runModelResponse);
     });
     // this.openDialog();
@@ -86,5 +95,17 @@ export class CategoriesTableComponent implements OnInit {
       console.log('The dialog was closed', result);
       this._router.navigate(['/modelprocessedhistory']);
     });
+  }
+  ngOnDestroy(): void {
+    if (this.runModelSubscription) {
+      this.runModelSubscription.unsubscribe();
+    }
+    if (this.modelFormulaTableSubscription) {
+      this.modelFormulaTableSubscription.unsubscribe();
+    }
+    if (this.catListDataSubscription) {
+      this.catListDataSubscription.unsubscribe();
+    }
+    this.modelFormulaTableDataSource.data = [];
   }
 }

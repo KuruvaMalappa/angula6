@@ -1,20 +1,23 @@
 import { NestedTreeControl } from '@angular/cdk/tree';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatTreeNestedDataSource } from '@angular/material';
 import { Categories } from './categories-model';
 import { CategoriesTreeService } from './categories-tree.service';
+import { Subscription } from 'rxjs/internal/Subscription';
 
 @Component({
   selector: 'app-categories-tree-view',
   templateUrl: './categories-tree-view.component.html',
   styleUrls: ['./categories-tree-view.component.css'],
 })
-export class CategoriesTreeViewComponent implements OnInit {
+export class CategoriesTreeViewComponent implements OnInit, OnDestroy {
+  
 
   nestedTreeControl: NestedTreeControl<Categories>;
   categoriesListDataSource: MatTreeNestedDataSource<Categories>;
   public parentNode: Categories;
   public currentCategoryId = null;
+  public categorySubScription: Subscription;
 
   constructor(private _categoriesService: CategoriesTreeService) {
     this.nestedTreeControl = new NestedTreeControl<Categories>(this._getChildren);
@@ -25,7 +28,7 @@ export class CategoriesTreeViewComponent implements OnInit {
   private _getChildren = (node: Categories) => node.categories;
 
   ngOnInit() {
-    this._categoriesService.getCategoriesList().subscribe((categoriesList: Categories) => {
+  this.categorySubScription = this._categoriesService.getCategoriesList().subscribe((categoriesList: Categories) => {
     this.categoriesListDataSource.data = [categoriesList];
     const listcopy = Object.assign({}, categoriesList);
     this._categoriesService.categorieData.next([listcopy]);
@@ -56,6 +59,10 @@ export class CategoriesTreeViewComponent implements OnInit {
       });
       return this.parentNode;
     }
+  }
+
+  ngOnDestroy(): void {
+    this.categorySubScription.unsubscribe();
   }
 
 }
