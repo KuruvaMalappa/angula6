@@ -26,18 +26,18 @@
       </div>
     </div>
     <div>
-      <form (ngSubmit)="onSubmitRunModel(runModelForm)" #runModelForm="ngForm">
+      <form (ngSubmit)="onSubmitRunModel()" [formGroup]="modelDescriptionForm">
         <div class="row">
           <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
             <label for="note">Model Description :</label>
           </div>
           <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-            <input type="text" class="form-control" id="modelDescription" [(ngModel)]="modelDescription" name="modelDescription"
+            <input type="text" class="form-control" id="modelDescription" formControlName="modelDescription" name="modelDescription"
               required>
           </div>
         </div>
         <div>
-          <button type="submit" class="btn btn-primary" [disabled]="!runModelForm.valid">Run Model</button>
+          <button type="submit" class="btn btn-primary" [disabled]="!modelDescriptionForm.valid">Run Model</button>
         </div>
       </form>
     </div>

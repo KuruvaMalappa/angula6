@@ -1,33 +1,36 @@
 <div>
-  <div *ngIf="modelFormula.fundingModel && modelFormula.fundingModel.length >0">
-    <h1> {{categoryData.parentNodeName }} : {{categoryData.categoryName}}</h1>
-    <form #modelFormulaForm="ngForm" (ngSubmit)="modelFormulaSubmit()">
-      <div class="row">
-        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-          <label for="fundingModel">Funding Value : </label>
+  <div>
+    <form [formGroup]="modelFormulaForm" (ngSubmit)="modelFormulaSubmit()">
+    <div *ngIf="modelFormulaForm?.value?.parentNodeName">
+        <h1> {{modelFormulaForm?.value?.parentNodeName }} : {{modelFormulaForm?.value?.categoryName}}</h1>
+        <div class="row">
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <label for="fundingModel">Funding Value : </label>
+          </div>
+          <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12">
+            {{modelFormulaForm?.value?.fundingModel}}
+          </div>
         </div>
-        <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12">
-          {{modelFormula?.fundingModel}}
+        <div class="row">
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <label for="maxValue">Maximum Value : </label>
+          </div>
+          <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12">
+            {{modelFormulaForm?.value?.maxValue}}
+          </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-          <label for="maxValue">Maximum Value : </label>
+        <div class="row">
+          <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
+            <label for="modelingValue">Modeling Value :</label>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+            <input type="text" class="form-control" id="modelingValue" formControlName="modelingValue" name="modelingValue"
+              required>
+          </div>
         </div>
-        <div class="col-lg-10 col-md-10 col-sm-12 col-xs-12">
-          {{modelFormula?.maxValue}}
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-lg-2 col-md-2 col-sm-12 col-xs-12">
-          <label for="modelingValue">Modeling Value :</label>
-        </div>
-        <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-          <input type="text" class="form-control" id="modelingValue" [(ngModel)]="modelFormula.modelingValue" name="modelingValue"
-            required>
-        </div>
-      </div>
-      <button type="submit" class="btn btn-primary" [disabled]="!modelFormulaForm.valid">Add</button>
+        <button type="submit" class="btn btn-primary" [disabled]="!modelFormulaForm.valid">Add</button>
+    </div>
+      
     </form>
   </div>
   <div>

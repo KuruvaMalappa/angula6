@@ -6,6 +6,7 @@ import { Categories, IModelFormulaTableData } from '../categories-tree-view/cate
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/internal/Subscription';
+import { FormGroup, FormControl } from '@angular/forms';
 
 @Component({selector: 'app-categories-table',
 templateUrl: './categories-table.component.html',
@@ -18,6 +19,7 @@ export class CategoriesTableComponent implements OnInit, OnDestroy {
   public runModelSubscription: Subscription;
   public modelFormulaTableSubscription: Subscription;
   public catListDataSubscription: Subscription;
+  public modelDescriptionForm: FormGroup;
   
 
   constructor(private _categoriesService: CategoriesTreeService, public dialog: MatDialog, private _router: Router) {
@@ -25,6 +27,9 @@ export class CategoriesTableComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.modelDescriptionForm = new FormGroup({
+      modelDescription: new FormControl('')
+    });
     this._categoriesService.modelFormulaTableDataChange.subscribe((responseData) => {
       if (responseData && !(responseData.length === 0)) {
         this.modelFormulaTableDataSource.data = [...this.modelFormulaTableDataSource.data , responseData];
@@ -36,15 +41,15 @@ export class CategoriesTableComponent implements OnInit, OnDestroy {
     });
     this.modelFormulaTableDataSource.data = [];
   }
-  onSubmitRunModel(runModelForm) {
-    console.log('runModelForm', runModelForm);
+  onSubmitRunModel() {
+    console.log('modelDescriptionForm', this.modelDescriptionForm);
     const localCategoryList =  this.categoriesListData;
     console.log('Before updated value', localCategoryList);
     this.recurrsiveCategoryList(localCategoryList);
     const data = {
       'ModelID': null,
       'ModelName': null,
-      'ModelDescription': runModelForm.value.modelDescription,
+      'ModelDescription': this.modelDescriptionForm.value.modelDescription,
       'ModelCreateDate': '',
       'ModelCreatedBy': '',
       'FormulaCategories': [Object.assign({}, this.categoriesListData[0])]
